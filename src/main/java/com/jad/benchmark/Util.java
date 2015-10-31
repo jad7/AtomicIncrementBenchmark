@@ -11,7 +11,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import java.util.*;
 
 /**
- * @author Ilya Krokhmalyov YC14IK1
+ * @author Ilya Krokhmalyov jad7kii@gmail.com
  * @since 10/26/15
  */
 
@@ -23,12 +23,10 @@ public class Util {
 
     public static void runOnMultithread(String test) throws RunnerException, InterruptedException {
         int cpus = Runtime.getRuntime().availableProcessors();
-        Set<String> names= new LinkedHashSet<>();
         Map<String, double[]> map = new HashMap<>();
-        //List<Collection<RunResult>> results = new ArrayList<>(cpus +1);
         for (int i = 1; i < cpus + 2; i++) {
+
             Options opt = new OptionsBuilder()
-                    //
                     .addProfiler(StackProfiler.class)
                     .include(test)
                     .threads(i)
@@ -40,7 +38,7 @@ public class Util {
                 BenchmarkParams params = runResult.getParams();
                 Collection<String> paramsKeys = params.getParamsKeys();
                 for (String paramsKey : paramsKeys) {
-                    label += ";"+paramsKey + params.getParam(paramsKey);
+                    label += ";" + paramsKey + params.getParam(paramsKey);
                 }
 
                 double[] doubles = map.get(label);
@@ -50,25 +48,8 @@ public class Util {
                 }
                 doubles[i - 1] = runResult.getPrimaryResult().getScore();
             }
-
-            /*if (names.isEmpty()) {
-                for (RunResult runResult : run) {
-                    names.add(runResult.getPrimaryResult().getLabel());
-                }
-
-            }
-
-            results.add(run);*/
         }
 
-        /*System.out.println("\n\n\nThreads,Label,Value");
-        for (Collection<RunResult> result : results) {
-            for (RunResult runResult : result) {
-                System.out.println(runResult.getParams().getThreads() + "," +
-                        "\"" + runResult.getPrimaryResult().getLabel() + "\"," +
-                        runResult.getPrimaryResult().getScore());
-            }
-        }*/
         for (int i = 1; i < cpus + 2; i++) {
             System.out.print("," + i);
         }
