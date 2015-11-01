@@ -86,7 +86,7 @@ public class IncrementBench {
         int ret;
         for (;;) {
             ret = intValue;
-            if (unsafe.compareAndSwapLong(this, offsetIntValue, ret, ++ret)) {
+            if (unsafe.compareAndSwapInt(this, offsetIntValue, ret, ++ret)) {
                 break;
             }
             LockSupport.parkNanos(1);
